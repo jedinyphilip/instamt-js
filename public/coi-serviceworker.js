@@ -60,7 +60,12 @@ if (typeof window === 'undefined') {
     };
 
     const n = navigator;
-    if (n.serviceWorker && n.serviceWorker.controller) {
+    // Only deregister if the consumer explicitly opted in.
+    // (Older vendored copies of this file deregistered on every page
+    // load that found a controller, which produced an infinite
+    // reload loop on GH Pages: deregister → reload → no controller
+    // → register → reload → has controller → deregister → ...)
+    if (coi.shouldDeregister() && n.serviceWorker && n.serviceWorker.controller) {
       n.serviceWorker.controller.postMessage({ type: 'deregister' });
     }
 
