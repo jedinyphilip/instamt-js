@@ -4,14 +4,7 @@ In-browser IRM microtubule cleanup, detection, tracking and per-MT kymograph
 extraction. Drop a multi-page TIFF in, get a zip out. Nothing leaves your
 machine — there is no server.
 
-Live: <https://yourusername.github.io/instamt-js/> (set this after you deploy.)
-
-## Why
-
-The workflow this is built for: send a colleague a URL, they click it, they
-have the tool. No env-setup dance, no version pinning, no "the binary doesn't
-run on your CPU". If you're doing batch processing, headless work, or anything
-that doesn't fit in a single tab, this probably isn't the right tool.
+Live: <https://jedinyphilip.github.io/instamt-js/>
 
 ## Quick start
 
@@ -193,9 +186,7 @@ scripts/
 
 ## Performance
 
-On a Macbook M1: a 109-frame 1024² 2-channel TIFF (~430 MB on disk)
-runs end-to-end in ~25 seconds with 8 workers. Cleanup is the
-dominant cost (~60% of total) because NLM is genuinely expensive. If
+Cleanup is the dominant cost (~60% of total) because NLM is genuinely expensive. If
 you're impatient, drop `nlmSearch` to 7 or `nlmHFactor` to 1.5 — both
 give back a few seconds at the cost of slightly fuzzier ridges.
 
@@ -228,6 +219,6 @@ file; **Import** loads one back. Useful for sharing exact runs.
 
 AGPL-3.0-or-later. See [LICENSE](LICENSE).
 
-In plain English: fork it, modify it, run it, redistribute it — but if you
+In other words - fork it, modify it, run it, redistribute it. But if you
 distribute a modified version (binary or source) or run a modified version
 over a network, your changes have to be available under the same licence.
