@@ -32,7 +32,7 @@ tune config. There's a hint next to every config field if you hover.
   which I haven't been willing to pay for yet.
 
 If the TIFF doesn't carry ImageJ metadata, the reader can't always tell
-whether N pages means "N frames" or "C channels × N/C frames"; the
+whether N pages means "N frames" or "C channels × N/C frames" - the
 `forceTiffChannels` knob lets you override.
 
 ## What the pipeline does
@@ -94,7 +94,7 @@ npm run build
 ```
 
 Static bundle in `dist/`. Deploy anywhere that serves files. The default
-`vite.config.ts` builds with `base = /instamt-js/`; override `VITE_BASE`
+`vite.config.ts` builds with `base = /instamt-js/`. Override `VITE_BASE`
 for a different repo name or a custom domain.
 
 ## Deploying to GitHub Pages
@@ -109,7 +109,7 @@ and SharedArrayBuffer need cross-origin-isolation. The trick is
 `public/coi-serviceworker.js` (vendored from
 [gzuidhof/coi-serviceworker](https://github.com/gzuidhof/coi-serviceworker)):
 it registers a service worker on first load that re-injects the headers
-via fetch interception. First-load reload is unavoidable; everything
+via fetch interception. First-load reload is unavoidable - everything
 after is normal.
 
 ## Layout
@@ -132,7 +132,7 @@ src/
       nlm.ts               non-local means
       skeletonize.ts       Zhang–Suen
       threshold.ts         Li threshold, global + tiled local
-      wavelet.ts           unused; kept for an experiment
+      wavelet.ts           unused - kept for an experiment
     cleanup/
       background.ts        FFT low-pass subtract
       denoise.ts           median + NLM + Gaussian + contrast
@@ -190,7 +190,7 @@ Cleanup is the dominant cost (~60% of total) because NLM is genuinely expensive.
 you're impatient, drop `nlmSearch` to 7 or `nlmHFactor` to 1.5 — both
 give back a few seconds at the cost of slightly fuzzier ridges.
 
-Memory peaks around 2× the stack size; a 1 GB stack wants ~2.5 GB of
+Memory peaks around 2× the stack size - a 1 GB stack wants ~2.5 GB of
 free RAM. The encoding phase used to OOM on bigger inputs but the
 buffer ordering in `pipeline.ts` was rewritten to drop the Float32
 sources before allocating the RGB overlay.
@@ -207,13 +207,13 @@ actually touch:
 - `minLengthUm` — drop short detections. Raise if your overlay has
   too many tiny fragments.
 - `lineage.adjacencyPx` — endpoint-merge radius. Raise if MTs
-  crossing at junctions are getting split into two lineages; lower if
+  crossing at junctions are getting split into two lineages - lower if
   unrelated MTs are merging.
 - `haloFilter.darkThreshold` — set to `0` to disable dust-halo
   filtering entirely.
 
 Hit **Save** in the config panel to dump current settings to a JSON
-file; **Import** loads one back. Useful for sharing exact runs.
+file - **Import** loads one back. Useful for sharing exact runs.
 
 ## License
 
