@@ -155,7 +155,10 @@ export function smoothTrackTemporal(
   return { id: track.id, frames: track.frames, arcs: newArcs };
 }
 
-function resampleArc(arc: Float32Array, step: number): { y: Float32Array; x: Float32Array; n: number } {
+function resampleArc(
+  arc: Float32Array,
+  step: number
+): { y: Float32Array; x: Float32Array; n: number } {
   const n = arc.length / 2;
   if (n < 2) {
     return { y: new Float32Array([arc[0] ?? 0]), x: new Float32Array([arc[1] ?? 0]), n: 1 };

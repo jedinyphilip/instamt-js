@@ -151,9 +151,7 @@ export function detectLineages(
         }
         for (const ei of [0, 1] as const) {
           const pi =
-            ei === 0
-              ? { y: ai[0]!, x: ai[1]! }
-              : { y: ai[ai.length - 2]!, x: ai[ai.length - 1]! };
+            ei === 0 ? { y: ai[0]!, x: ai[1]! } : { y: ai[ai.length - 2]!, x: ai[ai.length - 1]! };
           const ti = endpointTangent(ai, ei);
           for (const ej of [0, 1] as const) {
             const pj =

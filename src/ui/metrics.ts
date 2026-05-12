@@ -33,7 +33,11 @@ interface MetricInfo {
 }
 
 /** Resolve label + display value for a metric key under the chosen units. */
-function resolveSpec(key: string, units: Units, scale: Scale): {
+function resolveSpec(
+  key: string,
+  units: Units,
+  scale: Scale
+): {
   spec: UnitVariant;
   factor: number;
 } {
@@ -174,11 +178,7 @@ function downloadBlob(blob: Blob, filename: string): void {
 
 /** Attach Copy / Download click handlers to a toolbar emitted by
  *  `toolbarHtml()`. `csvBasename` controls the downloaded filename. */
-function wireTableToolbar(
-  root: HTMLElement,
-  table: HTMLTableElement,
-  csvBasename: string
-): void {
+function wireTableToolbar(root: HTMLElement, table: HTMLTableElement, csvBasename: string): void {
   const copyBtn = root.querySelector<HTMLButtonElement>('.metrics-copy');
   const dlBtn = root.querySelector<HTMLButtonElement>('.metrics-download');
   if (copyBtn) {

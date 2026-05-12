@@ -10,12 +10,7 @@ import {
 } from '../filters/threshold';
 import type { Image2D } from '../types';
 import { arcCenter, arcChord, arcLength, type Arc } from './arc';
-import {
-  bestPairing,
-  buildFilaments,
-  findIncidences,
-  findJunctions,
-} from './junctions';
+import { bestPairing, buildFilaments, findIncidences, findJunctions } from './junctions';
 import { walkArcs } from './segment';
 
 export interface DetectConfig {
@@ -122,10 +117,8 @@ export function detectFilaments(frame: Image2D, cfg: DetectConfig = DEFAULT_DETE
   //     producing a noise threshold.
   // Then hysteresis rescue (faint pixels 4-connected to a seed) on top
   // of either, controlled by hysteresisLowRatio.
-  const useLocal =
-    cfg.localThresholdTile != null && cfg.localThresholdTile > 0;
-  const useHysteresis =
-    cfg.hysteresisLowRatio < 1.0 && cfg.hysteresisLowRatio > 0;
+  const useLocal = cfg.localThresholdTile != null && cfg.localThresholdTile > 0;
+  const useHysteresis = cfg.hysteresisLowRatio < 1.0 && cfg.hysteresisLowRatio > 0;
   let mask: Uint8Array;
   if (useLocal) {
     const tHighMap = localLiThresholdMap(
@@ -139,11 +132,7 @@ export function detectFilaments(frame: Image2D, cfg: DetectConfig = DEFAULT_DETE
       : applyHysteresisThresholdMap(ridge, tHighMap, 1.0);
   } else {
     mask = useHysteresis
-      ? applyHysteresisThreshold(
-          ridge,
-          globalThresh * cfg.hysteresisLowRatio,
-          globalThresh
-        )
+      ? applyHysteresisThreshold(ridge, globalThresh * cfg.hysteresisLowRatio, globalThresh)
       : applyThreshold(ridge, globalThresh);
   }
   removeSmallObjects(mask, w, h, cfg.minObjectSize);

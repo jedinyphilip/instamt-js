@@ -200,10 +200,7 @@ export function findIncidences(
  *   - 3 arcs (Y-junction): base threshold (default -0.5)
  *   - 4+ arcs (likely X): looser, max(base + 0.2, -0.3)
  */
-export function bestPairing(
-  items: Incidence[],
-  maxPairCost: number
-): Array<[number, number]> {
+export function bestPairing(items: Incidence[], maxPairCost: number): Array<[number, number]> {
   const n = items.length;
   if (n < 2) return [];
 

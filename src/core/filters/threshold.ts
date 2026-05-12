@@ -286,11 +286,7 @@ export function applyHysteresisThresholdMap(
  *
  * tLow ≥ tHigh degenerates to plain `applyThreshold(img, tHigh)`.
  */
-export function applyHysteresisThreshold(
-  img: Image2D,
-  tLow: number,
-  tHigh: number
-): Uint8Array {
+export function applyHysteresisThreshold(img: Image2D, tLow: number, tHigh: number): Uint8Array {
   const data = img.data;
   const n = data.length;
   const [h, w] = img.shape;

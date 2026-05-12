@@ -60,7 +60,7 @@ export function walkArcs(skel: Uint8Array, w: number, h: number, minLen: number)
     const ordered: number[] = [];
     const walked = new Uint8Array(skel.length);
     let cur = start;
-    while (true) {
+    for (;;) {
       ordered.push(cur);
       walked[cur] = 1;
       const y = (cur / w) | 0;

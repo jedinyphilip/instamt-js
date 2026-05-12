@@ -22,12 +22,7 @@ import type { Image2D } from '../types';
  * and the deviation by sub-grey-level amounts, which is enough to
  * visibly distort the cleanup output.
  */
-export function fringeUnify(
-  img: Image2D,
-  windowSize = 41,
-  boost = 1.3,
-  preSmooth = 1.0
-): Image2D {
+export function fringeUnify(img: Image2D, windowSize = 41, boost = 1.3, preSmooth = 1.0): Image2D {
   const smoothed = preSmooth > 0 ? gaussianFilter2d(img, preSmooth) : img;
   // uint8 view (clip + truncate) — input to the median, matching
   // `np.clip(smoothed, 0, 255).astype(np.uint8)`.

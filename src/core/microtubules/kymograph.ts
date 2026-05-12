@@ -104,10 +104,14 @@ export function buildLineageKymograph(
         framesPresent[row] = 1;
 
         // Find the closest reference index for each member endpoint.
-        let idx0 = 0, idx1 = 0;
-        let best0 = Infinity, best1 = Infinity;
-        const a0y = arc[0]!, a0x = arc[1]!;
-        const a1y = arc[arc.length - 2]!, a1x = arc[arc.length - 1]!;
+        let idx0 = 0,
+          idx1 = 0;
+        let best0 = Infinity,
+          best1 = Infinity;
+        const a0y = arc[0]!,
+          a0x = arc[1]!;
+        const a1y = arc[arc.length - 2]!,
+          a1x = arc[arc.length - 1]!;
         for (let k = 0; k < refN; k++) {
           const d0 = Math.hypot(refY[k]! - a0y, refX[k]! - a0x);
           const d1 = Math.hypot(refY[k]! - a1y, refX[k]! - a1x);
@@ -133,8 +137,24 @@ export function buildLineageKymograph(
 
         const irmFrame = irm.data.subarray(f * stride, (f + 1) * stride);
         const fluorFrame = fluor.data.subarray(f * stride, (f + 1) * stride);
-        const sampledIrm = sampleAlongExtended(arcForSampling, irmFrame, h, w, thickness, nIn, step);
-        const sampledFluor = sampleAlongExtended(arcForSampling, fluorFrame, h, w, thickness, nIn, step);
+        const sampledIrm = sampleAlongExtended(
+          arcForSampling,
+          irmFrame,
+          h,
+          w,
+          thickness,
+          nIn,
+          step
+        );
+        const sampledFluor = sampleAlongExtended(
+          arcForSampling,
+          fluorFrame,
+          h,
+          w,
+          thickness,
+          nIn,
+          step
+        );
         for (let c = colLo; c <= colHi; c++) {
           irmKymo[row * nSamples + c] = sampledIrm[c - colLo]!;
           fluorKymo[row * nSamples + c] = sampledFluor[c - colLo]!;
@@ -202,14 +222,14 @@ function sampleAlongExtended(
     cum[i] = cum[i - 1]! + Math.hypot(dy, dx);
   }
   void cum[n - 1]; // total arc length captured by `cum`; unused in
-                   // this resample helper but kept for clarity.
+  // this resample helper but kept for clarity.
 
   // Resample to nSamples points evenly along arc length.
   const ys = new Float64Array(nSamples);
   const xs = new Float64Array(nSamples);
   let j = 0;
   for (let k = 0; k < nSamples; k++) {
-    const s = nSamples === 1 ? 0 : (k * step);
+    const s = nSamples === 1 ? 0 : k * step;
     while (j < n - 2 && cum[j + 1]! < s) j++;
     const c0 = cum[j]!;
     const c1 = cum[j + 1]!;
@@ -226,13 +246,15 @@ function sampleAlongExtended(
     const dy = ys[kNext]! - ys[kPrev]!;
     const dx = xs[kNext]! - xs[kPrev]!;
     const norm = Math.hypot(dy, dx);
-    let py = 0, px = 0;
+    let py = 0,
+      px = 0;
     if (norm > 1e-6) {
       // Perpendicular = rotate tangent 90°.
       py = -dx / norm;
       px = dy / norm;
     }
-    let acc = 0, cnt = 0;
+    let acc = 0,
+      cnt = 0;
     for (let t = -thickness; t <= thickness; t++) {
       const yy = Math.round(ys[k]! + py * t);
       const xx = Math.round(xs[k]! + px * t);

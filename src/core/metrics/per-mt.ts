@@ -210,4 +210,3 @@ function sampleMean(arc: Float32Array, frame: Float32Array, w: number, h: number
   }
   return cnt > 0 ? acc / cnt : 0;
 }
-

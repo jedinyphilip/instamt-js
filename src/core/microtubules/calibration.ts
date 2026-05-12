@@ -107,13 +107,7 @@ export function measureAvgFwhmPx(
 }
 
 /** Bilinear sampling with scipy 'nearest' boundary (clamp to edge). */
-function bilinearSample(
-  frame: Float32Array,
-  H: number,
-  W: number,
-  y: number,
-  x: number
-): number {
+function bilinearSample(frame: Float32Array, H: number, W: number, y: number, x: number): number {
   // 'nearest' mode: clamp to [0, H-1] and [0, W-1].
   const yc = Math.max(0, Math.min(H - 1, y));
   const xc = Math.max(0, Math.min(W - 1, x));

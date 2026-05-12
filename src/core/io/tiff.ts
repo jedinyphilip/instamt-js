@@ -219,9 +219,7 @@ function readPlanarPageBytes(
     const expectedBytes = rowsInStrip * W * bytesPerSample;
     const stripBytes = stripByteCounts ? stripByteCounts[j]! : expectedBytes;
     if (stripBytes < expectedBytes) {
-      throw new Error(
-        `Strip ${j} truncated: ${stripBytes} bytes vs expected ${expectedBytes}`
-      );
+      throw new Error(`Strip ${j} truncated: ${stripBytes} bytes vs expected ${expectedBytes}`);
     }
     const src = new Uint8Array(buf, stripOffsets[j]!, expectedBytes);
     const dstOffset = sample * channelSize + firstRow * W * bytesPerSample;

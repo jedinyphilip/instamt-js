@@ -187,7 +187,6 @@ export function showKymoModal(
   document.addEventListener('keydown', onKey);
 }
 
-
 /**
  * Draw a kymograph rescaled to TARGET_SIZE × TARGET_SIZE on a canvas
  * that also carries L (x) and T (y) axes in the requested units.

@@ -20,8 +20,10 @@
  * matches PyWavelets to floating-point precision.
  */
 
-const DB2_LOW = [-0.12940952255126037, 0.22414386804201339, 0.836516303737469, 0.48296291314453414];
-const DB2_HIGH = [-0.48296291314453414, 0.836516303737469, -0.22414386804201339, -0.12940952255126037];
+const DB2_LOW = [-0.12940952255126037, 0.22414386804201339, 0.836516303737469, 0.4829629131445341];
+const DB2_HIGH = [
+  -0.4829629131445341, 0.836516303737469, -0.22414386804201339, -0.12940952255126037,
+];
 
 /** Symmetric pad and convolve a 1-D row with `filter`, then downsample by 2. */
 function convolveDownsampleRow(
@@ -56,11 +58,7 @@ function convolveDownsampleRow(
  * Compute the diagonal detail (HH / 'dd') sub-band of a single-level
  * 2-D db2 wavelet decomposition of `img`.
  */
-export function db2DiagonalDetail(
-  data: Float32Array,
-  h: number,
-  w: number
-): Float64Array {
+export function db2DiagonalDetail(data: Float32Array, h: number, w: number): Float64Array {
   // Step 1: filter each row with high-pass (across columns) → temp
   // (h × w/2 elements).
   const halfW = Math.floor((w + DB2_HIGH.length - 1) / 2);

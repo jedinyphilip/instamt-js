@@ -1,6 +1,11 @@
 import JSZip from 'jszip';
 
-import { DEFAULT_CONFIG, runPipeline, type PipelineConfig, type PipelineOutput } from '../core/pipeline';
+import {
+  DEFAULT_CONFIG,
+  runPipeline,
+  type PipelineConfig,
+  type PipelineOutput,
+} from '../core/pipeline';
 import type { PipelineProgress } from '../core/progress';
 import { CONFIG_DESCRIPTIONS } from './configDescriptions';
 import { mountConfigForm } from './configForm';
@@ -412,10 +417,7 @@ export function mount(root: HTMLElement): void {
       globalCsv(aggregateGlobal(lastResult.metrics))
     );
     // Long-format per-frame timeseries — one row per (lineage, frame).
-    zip.file(
-      `${folder}results/${lastResult.stem}_timeseries.csv`,
-      timeseriesCsv(lastResult)
-    );
+    zip.file(`${folder}results/${lastResult.stem}_timeseries.csv`, timeseriesCsv(lastResult));
 
     const blob = await zip.generateAsync({ type: 'blob' });
     triggerDownload(blob, `${lastResult.stem}_results.zip`);
@@ -454,12 +456,18 @@ async function renderKymoPng(
   ctx.fillStyle = '#0d1117';
   ctx.fillRect(0, 0, W, H);
   ctx.fillStyle = '#e6edf3';
-  ctx.font = '24px -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif';
+  ctx.font =
+    '24px -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif';
   ctx.textBaseline = 'middle';
-  ctx.fillText(`${kymo.label}  (${kymo.irmMask.width} × ${kymo.irmMask.height} L × T)`, 24, HEADER / 2);
+  ctx.fillText(
+    `${kymo.label}  (${kymo.irmMask.width} × ${kymo.irmMask.height} L × T)`,
+    24,
+    HEADER / 2
+  );
 
   let y = HEADER;
-  ctx.font = '14px -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif';
+  ctx.font =
+    '14px -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif';
   ctx.fillStyle = '#7d8590';
   ctx.fillText('IRM', 24, y + SUBHEADER / 2);
   y += SUBHEADER;
@@ -478,7 +486,14 @@ async function renderKymoPng(
  *  (lineage, frame), one column per numeric metric. */
 function timeseriesCsv(out: PipelineOutput): string {
   if (out.timeseries.length === 0) return '';
-  const cols = ['label', 'frame_idx', 'lengthUm', 'lengthDeltaUmPerS', 'curvatureRadPerUm', 'fluorIntensityAu'];
+  const cols = [
+    'label',
+    'frame_idx',
+    'lengthUm',
+    'lengthDeltaUmPerS',
+    'curvatureRadPerUm',
+    'fluorIntensityAu',
+  ];
   const rows: string[] = [cols.join(',')];
   for (let li = 0; li < out.timeseries.length; li++) {
     const ts = out.timeseries[li]!;
@@ -490,16 +505,7 @@ function timeseriesCsv(out: PipelineOutput): string {
       const dlen = ts.lengthDeltaUmPerS[i - 1] ?? ''; // N-1 short
       const curv = ts.curvatureRadPerUm[i] ?? '';
       const flu = ts.fluorIntensityAu[i] ?? '';
-      rows.push(
-        [
-          label,
-          f,
-          numToCsv(len),
-          numToCsv(dlen),
-          numToCsv(curv),
-          numToCsv(flu),
-        ].join(',')
-      );
+      rows.push([label, f, numToCsv(len), numToCsv(dlen), numToCsv(curv), numToCsv(flu)].join(','));
     }
   }
   return rows.join('\n');
@@ -544,11 +550,7 @@ function metricsToCsv(out: PipelineOutput): string {
   return rows.join('\n');
 }
 
-function renderProgress(
-  els: AppEls,
-  ev: PipelineProgress,
-  phaseStart: Map<string, number>
-): void {
+function renderProgress(els: AppEls, ev: PipelineProgress, phaseStart: Map<string, number>): void {
   const key = `${ev.phase}:${ev.channel ?? ''}`;
   if (!phaseStart.has(key)) phaseStart.set(key, performance.now());
 
@@ -574,7 +576,9 @@ function formatEta(seconds: number): string {
   const s = Math.round(seconds);
   if (s < 60) return `${s}s`;
   if (s < 3600) return `${Math.floor(s / 60)}m${(s % 60).toString().padStart(2, '0')}s`;
-  return `${Math.floor(s / 3600)}h${Math.floor((s % 3600) / 60).toString().padStart(2, '0')}m`;
+  return `${Math.floor(s / 3600)}h${Math.floor((s % 3600) / 60)
+    .toString()
+    .padStart(2, '0')}m`;
 }
 
 function triggerDownload(blob: Blob, filename: string): void {

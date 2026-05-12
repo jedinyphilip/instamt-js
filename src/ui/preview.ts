@@ -57,8 +57,7 @@ export class PreviewPane {
 
   // Drag-to-pan state. `dragMaxDistance` is used to suppress the click
   // event when the gesture was actually a drag.
-  private dragStart: { clientX: number; clientY: number; panX: number; panY: number } | null =
-    null;
+  private dragStart: { clientX: number; clientY: number; panX: number; panY: number } | null = null;
   private dragMaxDistance = 0;
   private static readonly CLICK_DRAG_THRESHOLD = 4;
 
@@ -159,11 +158,7 @@ export class PreviewPane {
     // Scroll-wheel zoom centred on the cursor. Listen on the wrap so
     // wheel events near (but outside) the canvas still zoom.
     const wrap = root.querySelector<HTMLElement>('.preview-canvas-wrap')!;
-    wrap.addEventListener(
-      'wheel',
-      (ev) => this.handleWheel(ev, wrap),
-      { passive: false }
-    );
+    wrap.addEventListener('wheel', (ev) => this.handleWheel(ev, wrap), { passive: false });
     // Double-click resets zoom + pan.
     this.canvas.addEventListener('dblclick', (ev) => {
       ev.preventDefault();
@@ -207,7 +202,10 @@ export class PreviewPane {
 
   /** Find the lineage whose arc has a vertex closest to a given image-space
    *  pixel on the current frame. Returns null when nothing's loaded. */
-  private nearestLineage(cx: number, cy: number): {
+  private nearestLineage(
+    cx: number,
+    cy: number
+  ): {
     lineageId: number;
     label: string;
     color: [number, number, number];
@@ -216,7 +214,7 @@ export class PreviewPane {
     const arcs = this.overlayPerFrame[this.frame] ?? [];
     if (arcs.length === 0) return null;
     let bestDist2 = Infinity;
-    let best: typeof arcs[number] | null = null;
+    let best: (typeof arcs)[number] | null = null;
     for (const entry of arcs) {
       const arc = entry.arc;
       for (let p = 0; p < arc.length; p += 2) {

@@ -40,7 +40,10 @@ function mulberry32(seed: number): () => number {
 function denseIou(a: Arc, b: Arc, w: number, h: number, radius: number): number {
   const ma = new Uint8Array(w * h);
   const mb = new Uint8Array(w * h);
-  for (const [arc, m] of [[a, ma], [b, mb]] as const) {
+  for (const [arc, m] of [
+    [a, ma],
+    [b, mb],
+  ] as const) {
     for (let p = 0; p < arc.length; p += 2) {
       const cy = Math.round(arc[p]!);
       const cx = Math.round(arc[p + 1]!);

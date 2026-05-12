@@ -56,11 +56,7 @@ export function reverseArc(arc: Arc): Arc {
  * snap at the tip — enough to flip a tangent by 30°+ between frames
  * and tank the anti-parallel test in lineage merging.
  */
-export function endpointTangent(
-  arc: Arc,
-  end: 0 | 1,
-  nPts = 8
-): { ty: number; tx: number } {
+export function endpointTangent(arc: Arc, end: 0 | 1, nPts = 8): { ty: number; tx: number } {
   const n = arc.length / 2;
   if (n < 2) return { ty: 0, tx: 0 };
   let i0: number;
@@ -114,7 +110,7 @@ export function endpointTangent(
     vy = 0;
     vx = 1;
   }
-  let nrm = Math.hypot(vy, vx);
+  const nrm = Math.hypot(vy, vx);
   if (nrm < 1e-9) {
     // Degenerate (all points collapse). Fall back to the 2-point chord.
     const endIdx = end === 0 ? i0 : i1;

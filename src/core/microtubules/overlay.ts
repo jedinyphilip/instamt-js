@@ -58,11 +58,7 @@ function hslToRgb(h: number, s: number, l: number): [number, number, number] {
     b = x;
   }
   const m = l - c / 2;
-  return [
-    Math.round((r + m) * 255),
-    Math.round((g + m) * 255),
-    Math.round((b + m) * 255),
-  ];
+  return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
 }
 
 export interface OverlayOptions {
@@ -254,7 +250,7 @@ function bresenham(
   let err = dx + dy;
   let x = x0,
     y = y0;
-  while (true) {
+  for (;;) {
     plot(rgb, base, H, W, y, x, r, g, b);
     plot(rgb, base, H, W, y + 1, x, r, g, b);
     plot(rgb, base, H, W, y, x + 1, r, g, b);

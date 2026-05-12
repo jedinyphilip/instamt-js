@@ -29,9 +29,7 @@ export function meijering(
   const [h, w] = img.shape;
   const n = h * w;
 
-  const work: Image2D = blackRidges
-    ? img
-    : { data: negate(img.data), shape: img.shape };
+  const work: Image2D = blackRidges ? img : { data: negate(img.data), shape: img.shape };
 
   const alpha = 1 / 3; // 1/(ndim + 1) for 2D
   const filteredMax = new Float32Array(n);

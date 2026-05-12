@@ -4,11 +4,7 @@ import {
   writeTiffStack8FromU8,
   writeTiffStackRgbFromU8,
 } from './io/tiff';
-import {
-  computePerMtMetrics,
-  type PerMtMetrics,
-  type PerMtTimeseries,
-} from './metrics/per-mt';
+import { computePerMtMetrics, type PerMtMetrics, type PerMtTimeseries } from './metrics/per-mt';
 import { measureAvgFwhmPx } from './microtubules/calibration';
 import { DEFAULT_DETECT, type DetectConfig } from './microtubules/detect';
 import {
@@ -453,10 +449,7 @@ export async function runPipeline(
     if (config.autoScale) {
       const probeFrameIdx = Math.floor(T / 2);
       const probeImg = {
-        data: cleaned.data.slice(
-          probeFrameIdx * stride,
-          (probeFrameIdx + 1) * stride
-        ),
+        data: cleaned.data.slice(probeFrameIdx * stride, (probeFrameIdx + 1) * stride),
         shape: [h, w] as const,
       };
       // Probe the per-frame shift first so we don't bias the response
@@ -820,9 +813,7 @@ export async function runPipeline(
   // demand from cleanedFrames / fluorFrames + overlayPerFrame, so we
   // don't have to keep this RGB buffer alive after encoding.
   const colors = trackColors(lineages.length);
-  const overlayOpts = config.debugOverlay
-    ? { rawDetections: perFrame, rawTracks: tracks }
-    : {};
+  const overlayOpts = config.debugOverlay ? { rawDetections: perFrame, rawTracks: tracks } : {};
   const { rgb: overlayRgb } = renderOverlay(cleaned, tracks, lineages, colors, overlayOpts);
 
   // 9d. Drop the Float32 sources now that all derived buffers are
@@ -866,10 +857,7 @@ export async function runPipeline(
   // Per-frame lineage hit-test data: list of (lineageId, label, color, arc)
   // entries for every frame, so the UI can map clicks on the overlay
   // canvas back to a specific lineage and pop up its kymograph.
-  const overlayPerFrame: PipelineOutput['overlayPerFrame'] = Array.from(
-    { length: T },
-    () => []
-  );
+  const overlayPerFrame: PipelineOutput['overlayPerFrame'] = Array.from({ length: T }, () => []);
   // Each lineage's kymograph index matches its position in `lineages`.
   const labelOf = (li: number): string => `L${(li + 1).toString().padStart(3, '0')}`;
   for (let li = 0; li < lineages.length; li++) {
@@ -909,8 +897,7 @@ export async function runPipeline(
   // else inverse of TIFF seconds/frame, else null. The kymograph axis
   // is paced by the IRM frame rate, so use that here.
   const tiffFallbackFps = tiffSecPerFrame && tiffSecPerFrame > 0 ? 1 / tiffSecPerFrame : null;
-  const resolvedFps =
-    (config.swapChannels ? config.fpsCh1 : config.fpsCh0) ?? tiffFallbackFps;
+  const resolvedFps = (config.swapChannels ? config.fpsCh1 : config.fpsCh0) ?? tiffFallbackFps;
 
   const stem = file.name.replace(/\.(tif|tiff)$/i, '');
   const out: PipelineOutput = {
@@ -955,9 +942,7 @@ function medianOf(arr: Float64Array): number {
   sorted.sort((a, b) => a - b);
   if (sorted.length === 0) return 0;
   const mid = sorted.length >>> 1;
-  return sorted.length % 2 === 0
-    ? 0.5 * (sorted[mid - 1]! + sorted[mid]!)
-    : sorted[mid]!;
+  return sorted.length % 2 === 0 ? 0.5 * (sorted[mid - 1]! + sorted[mid]!) : sorted[mid]!;
 }
 
 /**

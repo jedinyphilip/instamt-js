@@ -21,7 +21,7 @@ function gaussianKernel1d(sigma: number, order: 0 | 1, radius: number): Float64A
   const sigma2 = sigma * sigma;
   let sum = 0;
   for (let i = -radius; i <= radius; i++) {
-    const v = Math.exp(-0.5 * (i * i) / sigma2);
+    const v = Math.exp((-0.5 * (i * i)) / sigma2);
     k[i + radius] = v;
     sum += v;
   }

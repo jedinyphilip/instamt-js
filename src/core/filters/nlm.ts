@@ -70,10 +70,10 @@ export function denoiseNlMeansFast(
     for (let dx = -s; dx <= s; dx++) {
       // Squared difference image. Out-of-image neighbours contribute 0
       // (skimage clips at the boundary too).
-      let yMin = Math.max(0, -dy);
-      let yMax = Math.min(H, H - dy);
-      let xMin = Math.max(0, -dx);
-      let xMax = Math.min(W, W - dx);
+      const yMin = Math.max(0, -dy);
+      const yMax = Math.min(H, H - dy);
+      const xMin = Math.max(0, -dx);
+      const xMax = Math.min(W, W - dx);
       diff.fill(0);
       for (let y = yMin; y < yMax; y++) {
         const ny = y + dy;

@@ -23,10 +23,7 @@
 import { fftBackgroundSubtract } from '../cleanup/background';
 import { denoise } from '../cleanup/denoise';
 import { fringeUnify } from '../cleanup/fringe';
-import {
-  buildLineageKymograph,
-  type KymographResult,
-} from '../microtubules/kymograph';
+import { buildLineageKymograph, type KymographResult } from '../microtubules/kymograph';
 import { detectFilaments, type DetectConfig } from '../microtubules/detect';
 import type { Track } from '../microtubules/track';
 import type { Shape3D } from '../types';
