@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>insta-mt</title>
+    <meta name="description" content="In-browser IRM microtubule cleanup and per-MT kymograph extraction." />
+    <link rel="icon" href="data:," />
+    <script type="module">
+      // The COI service worker only matters in production (GitHub Pages
+      // can't set COOP/COEP headers). In dev, vite.config.ts sets them
+      // directly — registering the SW there causes an HMR reload loop.
+      if (import.meta.env.PROD) {
+        const s = document.createElement('script');
+        s.src = `${import.meta.env.BASE_URL}coi-serviceworker.js`;
+        document.head.appendChild(s);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
