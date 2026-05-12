@@ -89,15 +89,11 @@ interface AppEls {
 
 export function mount(root: HTMLElement): void {
   root.innerHTML = `
-    <h1>insta-mt <span class="tag">v0.3</span></h1>
+    <h1>InstaMT – IRM microtubule analysis <span class="tag">v0.3</span></h1>
     <p class="note">
       <strong>Note:</strong> convert <code>.nd2</code> and other acquisition formats to TIFF in
       Fiji (ImageJ): <code>File → Import → Bio-Formats…</code>, then
       <code>File → Save As → Tiff…</code>.
-    </p>
-    <p class="subtitle">
-      In-browser IRM cleanup, MT detection, tracking and per-MT kymograph extraction.
-      Drop in a multi-page TIFF; results download as a zip.
     </p>
 
     <div class="layout">
@@ -119,7 +115,7 @@ export function mount(root: HTMLElement): void {
           </div>
         </div>
 
-        <details class="panel" id="configPanel" open>
+        <details class="panel" id="configPanel">
           <summary>
             <span class="config-summary-text">Pipeline config</span>
             <span class="hint">hover for descriptions · persisted across sessions</span>
