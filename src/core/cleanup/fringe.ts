@@ -17,11 +17,10 @@ import type { Image2D } from '../types';
  *   5. result = baseline − |deviation| × boost  (mirror down)
  *   6. clip to [0, 255]
  *
- * The earlier version skipped the uint8 truncation and used the
- * clipped-but-not-truncated Float32 in the deviation step, which
- * shifted both the baseline and the deviation by sub-grey-level
- * amounts — the residual was the dominant cleanup-stage divergence
- * vs Python after the wavelet/NLM fixes.
+ * Skipping the uint8 truncation here and using the clipped-but-not-
+ * truncated Float32 in the deviation step shifts both the baseline
+ * and the deviation by sub-grey-level amounts, which is enough to
+ * visibly distort the cleanup output.
  */
 export function fringeUnify(
   img: Image2D,
@@ -39,9 +38,8 @@ export function fringeUnify(
   }
   const baseline = medianFilter2d({ data: u8, shape: img.shape }, windowSize);
 
-  // Deviation uses the ORIGINAL Float32 smoothed (matches Python's
-  // `deviation = smoothed - local_bg.astype(np.float64)`), not the
-  // truncated uint8 view.
+  // Deviation uses the ORIGINAL Float32 smoothed, not the truncated
+  // uint8 view — the latter loses sub-grey-level detail.
   const out = new Float32Array(img.data.length);
   for (let i = 0; i < img.data.length; i++) {
     const dev = smoothed.data[i]! - baseline.data[i]!;

@@ -1,8 +1,9 @@
 import type { Image2D } from '../types';
 
 /**
- * Li's iterative minimum cross-entropy threshold. Port of
- * `skimage.filters.threshold_li`.
+ * Li's iterative minimum cross-entropy threshold (Li & Tam 1998).
+ * Matches `skimage.filters.threshold_li` on the standard fixtures —
+ * see `tests/li.test.ts`.
  *
  * Iteratively refine t until t_next ≈ t_curr (within tolerance):
  *   t_next = (mean_back - mean_fore) / (ln(mean_back) - ln(mean_fore))
@@ -10,9 +11,6 @@ import type { Image2D } from '../types';
  * The image is shifted to be non-negative for the log step and the
  * shift is undone in the returned threshold. Default tolerance is
  * half the smallest difference between distinct image values.
- *
- * What the Python pipeline uses for its Meijering response
- * thresholding, so this is the version we want for fidelity.
  */
 export function liThreshold(img: Image2D): number {
   const data = img.data;
@@ -81,7 +79,7 @@ export function liThreshold(img: Image2D): number {
 
 /**
  * Otsu's method on a 256-bin histogram. Kept for tests / comparison;
- * the production pipeline uses {@link liThreshold} to match Python.
+ * the pipeline uses {@link liThreshold}.
  */
 export function otsuThreshold(img: Image2D): number {
   const data = img.data;
@@ -348,8 +346,8 @@ export function applyHysteresisThreshold(
  * In-place on the binary mask.
  *
  * The previous 8-connected version kept many diagonal-only components
- * that Python would have dropped — a major source of spurious filaments
- * in the detection step.
+ * (single-pixel chains) that should be dropped — they're a major
+ * source of spurious filaments downstream.
  */
 export function removeSmallObjects(mask: Uint8Array, w: number, h: number, minSize: number): void {
   const labels = new Int32Array(mask.length);
@@ -393,8 +391,7 @@ export function removeSmallObjects(mask: Uint8Array, w: number, h: number, minSi
   }
 
   // skimage 0.26+ removes objects with size *<= min_size* (was `<`).
-  // Match the new semantics so a min_size=30 call drops 30-pixel
-  // components — Python's reference does.
+  // Same here: a min_size=30 call drops 30-pixel components.
   for (let i = 0; i < mask.length; i++) {
     if (labels[i] && sizes[labels[i]!]! <= minSize) mask[i] = 0;
   }

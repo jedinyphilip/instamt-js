@@ -21,14 +21,13 @@ export interface KymographResult {
 }
 
 /**
- * Build a (T × L) kymograph for a lineage. Mirrors the Python
- * `build_lineage_kymograph` exactly, including:
- *   - Singleton lineages: each frame's arc sampled directly with
- *     seed at column 0; the IRM mask covers [0, chord(arc_t)].
+ * Build a (T × L) kymograph for a lineage. Two paths:
+ *   - Singleton lineages: each frame's arc sampled directly with the
+ *     seed end at column 0.
  *   - Multi-member lineages: a reference geometry (the longest arc the
  *     lineage ever had) defines the column axis. For each frame's
  *     active members, the member's endpoints are projected onto the
- *     reference to get a column range [col_lo, col_hi]; fluor inside
+ *     reference to get a column range [col_lo, col_hi]; signal inside
  *     that range is sampled along the MEMBER's arc, mapping
  *     arc-length 0..L_member into col_lo..col_hi. Off-member columns
  *     stay at 0 in both kymographs.

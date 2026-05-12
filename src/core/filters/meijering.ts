@@ -2,8 +2,8 @@ import { hessianEigenvaluesAbs } from './hessian';
 import type { Image2D } from '../types';
 
 /**
- * Meijering "neuriteness" ridge filter. Ports
- * skimage.filters.ridges.meijering for 2-D images.
+ * Meijering "neuriteness" ridge filter for 2-D images. Matches
+ * skimage.filters.ridges.meijering on the standard fixtures.
  *
  * Algorithm per σ:
  *   1. Hessian eigenvalues (e0, e1) sorted by |·| DESCENDING (skimage

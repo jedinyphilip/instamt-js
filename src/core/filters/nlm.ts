@@ -36,10 +36,9 @@ export function denoiseNlMeansFast(
 
   // Reflect-pad the input to match skimage: skimage internally pads by
   // `patch_size//2 + patch_distance` and runs NLM on the padded image,
-  // returning the un-padded centre. Without this, JS leaves the
-  // outermost ~r+s pixels untouched (boundary pixels in the input pass
-  // straight through), producing a ring of ~16 grey-level differences
-  // vs Python's NLM output.
+  // returning the un-padded centre. Without this the outermost ~r+s
+  // pixels go untouched (boundary pixels in the input pass straight
+  // through), producing a visible grey-level ring around the image.
   const pad = r + s;
   const H = H0 + 2 * pad;
   const W = W0 + 2 * pad;

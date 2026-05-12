@@ -49,7 +49,7 @@ function pointVariance(pts: Array<[number, number]>): number {
  * Per-track temporal Gaussian smoothing. Each arc is resampled at
  * 1-px steps, padded with NaN to the longest frame's length, then
  * Gaussian-smoothed along the time axis (NaN-aware so tips don't
- * blur in from short frames). Mirrors the Python `smooth_track_temporal`.
+ * blur in from short frames).
  *
  * Samples are aligned by arc-length index from the minus end, not
  * by spatial position. When the minus-end pixel jitters or the MT

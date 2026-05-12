@@ -2,7 +2,6 @@ import { endpointTangent, type Arc } from './arc';
 
 /**
  * Junction discovery, arc-end-to-junction incidence, and pairing.
- * Mirrors the Python detect_filaments junction logic.
  */
 
 export interface Junction {
@@ -16,8 +15,7 @@ export interface Junction {
 
 /**
  * Cluster branch-point pixels by 8-connectivity, then merge clusters
- * whose pixel sets come within `mergeRadius` of each other (matches
- * `junction_merge_radius` in Python).
+ * whose pixel sets come within `mergeRadius` of each other.
  */
 export function findJunctions(
   branchPixels: Uint8Array,
@@ -222,7 +220,9 @@ export function bestPairing(
     }
   }
 
-  // Matches Python `_best_pairing` exactly:
+  // Context-aware threshold: the more arcs meet at a junction, the
+  // more permissive the pairing — X-crossings benefit from looser
+  // constraints than T-junctions.
   //   n ≥ 4 (X):  cost_thresh = max(maxPairCost + 0.2, -0.3)
   //   n == 3 (Y): cost_thresh = maxPairCost
   //   n == 2 (T): cost_thresh = min(maxPairCost - 0.2, -0.7)

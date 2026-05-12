@@ -5,8 +5,8 @@ import type { Image2D } from '../types';
  * 2-D FFT via row-then-column 1-D FFTs. fft.js does power-of-two only,
  * so non-pow2 inputs are zero-padded up. The padding has to be done
  * with mirror reflection at the image boundary, otherwise the low-pass
- * gets ringing artefacts at the edges (which is exactly what the
- * scipy.ndimage.gaussian_filter("mirror") in the Python code avoids).
+ * gets ringing artefacts at the edges (same trick as
+ * scipy.ndimage.gaussian_filter("mirror")).
  */
 
 function nextPow2(n: number): number {
@@ -60,17 +60,14 @@ function reflectPadCentred(
  * are attenuated.
  *
  * Filter: exp(-0.5 * (f/fc)²) with fc = 1/cutoffPixels, f in
- * cycles/pixel. Matches numpy.fft.fft2 + the formula in the Python
- * `background.py`.
+ * cycles/pixel.
  */
 export function gaussianLowPass(img: Image2D, cutoffPixels: number): Image2D {
   const [h, w] = img.shape;
-  // Python pads symmetrically by cutoff*2 on each side, then FFTs. We
-  // match that pad amount and round up to the next power of two for
-  // fft.js. Because the FFT-domain Gaussian filter is symmetric, the
-  // exact alignment of the reflected pad doesn't change the interior
-  // result, only the suppressed edge ringing — so as long as our pad
-  // is at least as wide as Python's, the unpadded crop matches.
+  // Pad symmetrically by cutoff*2 on each side, then round up to the
+  // next power of two for fft.js. The FFT-domain Gaussian is
+  // symmetric, so the alignment of the reflected pad doesn't change
+  // the interior result, only the suppressed edge ringing.
   const pad = Math.max(2, Math.round(cutoffPixels * 2));
   const padH = nextPow2(h + 2 * pad);
   const padW = nextPow2(w + 2 * pad);

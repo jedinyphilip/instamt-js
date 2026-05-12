@@ -100,8 +100,7 @@ self.addEventListener('message', (ev: MessageEvent<WorkerRequest>) => {
   let cleaned = img;
 
   if (req.mode === 'cleanup' || req.mode === 'both') {
-    // Order matches Python `pipeline.py:_process_one_frame`:
-    //   bg-correct → fringe-unify → denoise+enhance.
+    // bg-correct → fringe-unify → denoise+enhance.
     const { corrected } = fftBackgroundSubtract(img, req.fftCutoffPixels);
     const flipped = fringeUnify(corrected, req.fringeWindow, req.fringeBoost);
     cleaned = denoise(flipped, req.contrast, req.nlmHFactor, req.nlmPatch, req.nlmSearch);

@@ -1,7 +1,7 @@
 /**
- * Run our JS detection/tracking/lineage on the same Python-cleaned IRM
- * stack and report counts. Used to verify parity with the Python
- * reference without going through the worker pool / browser layer.
+ * Run detection/tracking/lineage on a pre-cleaned IRM stack and
+ * report counts. Used for offline comparison against reference
+ * outputs without going through the worker pool / browser layer.
  */
 
 import * as fs from 'node:fs';
@@ -26,7 +26,7 @@ async function main(tiffPath: string, maxFrames: number): Promise<void> {
   const T = Math.min(Tfull, maxFrames);
   console.log(`Loaded: ${Tfull} frames (using ${T}), ${h}x${w}`);
 
-  // Apply flatten_time first (Python pipeline does this before detect).
+  // Apply flatten_time first (the reference pipeline does this before detect).
   flattenTime(stack.data, Tfull, h * w, 50);
   console.log('flatten_time applied');
 
@@ -52,7 +52,7 @@ async function main(tiffPath: string, maxFrames: number): Promise<void> {
     `Filaments: min=${Math.min(...counts)}, mean=${(total / T).toFixed(1)}, max=${Math.max(...counts)}, total=${total}`
   );
 
-  // Arc length distribution for frame 0 (compare to Python).
+  // Arc length distribution for frame 0 (compare against reference).
   const f0Lens = (perFrame[0] ?? []).map((a) => a.length / 2).sort((a, b) => b - a);
   console.log(`Frame 0 arc lengths (top 20): ${f0Lens.slice(0, 20).join(', ')}`);
   const mean0 = f0Lens.reduce((s, v) => s + v, 0) / f0Lens.length;

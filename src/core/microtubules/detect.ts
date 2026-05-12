@@ -61,9 +61,8 @@ export interface DetectConfig {
   localThresholdFloorRatio: number;
 }
 
-// Defaults aligned with the user's Python `config.json` operating point:
-// max_junction_gap=6, junction_merge_radius=8 (the argparse defaults of
-// 3/6 are too tight for the MT scales we're seeing in real data).
+// max_junction_gap=6, junction_merge_radius=8 work for the MT scales
+// we typically see; smaller values (3/6) are too tight in practice.
 export const DEFAULT_DETECT: DetectConfig = {
   sigmas: [1.0, 1.5, 2.0],
   minObjectSize: 30,
@@ -72,37 +71,32 @@ export const DEFAULT_DETECT: DetectConfig = {
   junctionMergeRadius: 8.0,
   maxPairCost: 0.0,
   maxBrightnessPct: null,
-  // Disabled by default — Python's `_detect_arcs_and_junctions` uses a
-  // single global Li without hysteresis. Bump below 1 to enable
-  // hysteresis-rescue as an opt-in enhancement.
+  // Disabled by default. Bump below 1 to enable hysteresis-rescue of
+  // faint ridge tails.
   hysteresisLowRatio: 1.0,
-  // Disabled by default — Python uses a single global Li threshold.
-  // Set to an integer (e.g. 256) to enable per-tile Li thresholding as
-  // an opt-in enhancement for inputs with strong illumination gradient.
+  // Disabled by default. Set to an integer (e.g. 256) to enable
+  // per-tile Li for inputs with strong illumination gradient.
   localThresholdTile: null,
   localThresholdFloorRatio: 0.5,
 };
 
 /**
  * Per-frame detection. Returns the assembled MT filaments as ordered
- * (y, x) Float32 arrays. Mirrors the Python `detect_filaments`.
+ * (y, x) Float32 arrays.
  */
 export function detectFilaments(frame: Image2D, cfg: DetectConfig = DEFAULT_DETECT): Arc[] {
   const [h, w] = frame.shape;
 
-  // Match Python `_detect_arcs_and_junctions` exactly:
+  // Detection on the cleaned frame:
   //   f = uint8_frame.astype(np.float32) / 255.0
   //   ridge = meijering(1-f, sigmas, black_ridges=False)
   //   ridge = ridge / ridge.max()
   //   mask = ridge > threshold_li(ridge)
   //
-  // Python reads the cleaned IRM from disk as uint8 (truncated), so
-  // detect sees integer-valued pixels in [0, 255] divided by 255. The
-  // JS pipeline keeps the cleanup output as Float32 in-memory; we
-  // truncate here to match Python's uint8 round-trip exactly. Without
-  // this, sub-grey-level Float32 residuals in the cleaned data shift
-  // borderline ridge pixels across the Li threshold and produce extra
-  // candidate arcs.
+  // The Math.floor + /255 enforces uint8 quantisation before ridge
+  // detection: sub-grey-level Float32 residuals in the cleaned data
+  // would otherwise shift borderline ridge pixels across the Li
+  // threshold and produce extra spurious candidate arcs.
   const normFrame = new Float32Array(frame.data.length);
   for (let i = 0; i < frame.data.length; i++) {
     let v = frame.data[i]!;

@@ -2,8 +2,7 @@ import type { Image2D } from '../types';
 
 /**
  * Separable 2-D Gaussian filter. Same default truncation as
- * scipy.ndimage.gaussian_filter (4σ → ~0.0001 weight at the edge), so
- * results match the Python pipeline within float rounding.
+ * scipy.ndimage.gaussian_filter (4σ → ~0.0001 weight at the edge).
  */
 export function gaussianFilter2d(img: Image2D, sigma: number, truncate = 4.0): Image2D {
   if (sigma <= 0) return { data: img.data.slice(), shape: img.shape };

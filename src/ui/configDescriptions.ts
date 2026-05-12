@@ -14,7 +14,7 @@ export const CONFIG_DESCRIPTIONS: Record<string, string> = {
   contrast:
     'Linear contrast boost: deviations from the per-frame mean are multiplied by this factor after denoising. Default 2.5.',
   nlmHFactor:
-    'Non-local means smoothing strength as a multiple of the estimated noise σ. ~1.0 preserves fine detail, ~4.0 (Python default) smooths aggressively. Calibrated for 0-255 input.',
+    'Non-local means smoothing strength as a multiple of the estimated noise σ. ~1.0 preserves fine detail, ~4.0 smooths aggressively. Calibrated for 0-255 input.',
   nlmPatch: 'Non-local means patch size in pixels. Default 7.',
   nlmSearch:
     'Non-local means search-window radius in pixels. Larger = slower but better quality (cost scales as r²). Default 7; bump to 11 for skimage parity if you see residual graininess.',
@@ -37,7 +37,7 @@ export const CONFIG_DESCRIPTIONS: Record<string, string> = {
   'detect.maxPairCost':
     'Max tangent dot-product to accept a pair of arcs as continuing through a junction. 0 = ≥90° from anti-parallel rejected. Default 0.',
   'detect.maxBrightnessPct':
-    'Reject filaments whose median pixel intensity is above this percentile of the frame. MTs are dark in IRM. null = disabled (Python default). Set 50–70 to filter bright-spot artefacts.',
+    'Reject filaments whose median pixel intensity is above this percentile of the frame. MTs are dark in IRM. null = disabled. Set 50–70 to filter bright-spot artefacts.',
   'detect.hysteresisLowRatio':
     'Hysteresis low/high ratio for the ridge mask. The high threshold is the (global or local) Li cutoff; pixels above ratio × cutoff that are 4-connected to a seed pixel are also kept, rescuing faint MT terminals dragged below threshold by stronger ridges elsewhere. Lower = more aggressive rescue. 1.0 = disabled. Default 0.8.',
   'detect.localThresholdTile':
@@ -69,13 +69,13 @@ export const CONFIG_DESCRIPTIONS: Record<string, string> = {
 
   // Lineage detection (merging tracks that belong to the same physical MT).
   'lineage.iouThresh':
-    'Min dilated-mask IoU at the boundary frame to temporally link a track that ends with one that starts. Mirrors the tracking IoU but applied at lineage boundaries (merge/split events). Default 0.2.',
+    'Min dilated-mask IoU at the boundary frame to temporally link a track that ends with one that starts. Same idea as the tracking IoU but applied at lineage boundaries (merge/split events). Default 0.2.',
   'lineage.maxGap':
     'Max temporal gap (frames) between one track ending and another starting for them to be merged into one lineage. Default 2.',
   'lineage.adjacencyPx':
     'Endpoint distance threshold (px) for spatial lineage merging. Two coexisting tracks whose endpoints come within this radius AND pass the momentum test get merged. Needs to cover the synthetic gap that junctionMergeRadius + maxJunctionGap create between fragments meeting at a crossing — at default detect settings (radius 8, gap 6) two arcs continuing through a junction can have endpoints up to ~28 px apart. Default 20; raise toward 28 if crossing-MT lineages still split.',
   'lineage.adjacencyDot':
-    'Tangent dot-product threshold for endpoint-adjacency lineage merging. Two coexisting tracks whose endpoints come within adjacencyPx AND whose outward tangents have dot ≤ this value get merged. −1 = perfectly anti-parallel; −0.9 ≈ 26° from anti-parallel (Python default). Less negative = more permissive merging.',
+    'Tangent dot-product threshold for endpoint-adjacency lineage merging. Two coexisting tracks whose endpoints come within adjacencyPx AND whose outward tangents have dot ≤ this value get merged. −1 = perfectly anti-parallel; −0.9 ≈ 26° from anti-parallel. Less negative = more permissive merging.',
   'lineage.overlapIou':
     'Spatial-overlap threshold (IoU) for lineage merging. Two coexisting tracks whose dilated arc masks have IoU ≥ this value at any common frame get merged regardless of tangent direction — catches duplicate parallel detections of the same MT. Plain IoU (no containment fallback) keeps small-vs-large parallel pairs apart: the union is dominated by the larger arc so the IoU stays low. Default 0.4. Set to 1.0 to disable.',
   'lineage.overlapDilatePx':

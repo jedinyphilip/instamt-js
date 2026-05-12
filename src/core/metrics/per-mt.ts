@@ -34,9 +34,9 @@ export interface PerMtTimeseries {
 }
 
 /**
- * Per-lineage structural + dynamics + fluor metrics. Mirrors the
- * Python `compute_lineage_metrics` for every column we currently
- * report.
+ * Per-lineage structural + dynamics + fluor metrics: length, mean
+ * length-delta, catastrophe / rescue counts, curvature, orientation,
+ * and the per-frame fluor intensity sampled along the arc.
  */
 export function computePerMtMetrics(
   label: string,

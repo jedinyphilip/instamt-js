@@ -1,4 +1,4 @@
-# insta-mt (browser build)
+# insta-mt
 
 In-browser IRM microtubule cleanup, detection, tracking and per-MT kymograph
 extraction. Drop a multi-page TIFF in, get a zip out. Nothing leaves your
@@ -8,11 +8,10 @@ Live: <https://yourusername.github.io/instamt-js/> (set this after you deploy.)
 
 ## Why
 
-The desktop pipeline works fine, but it's a Python + conda dance every time
-you want to hand it to someone else. The browser version exists for exactly
-one workflow: sending a colleague a URL so they can run their own data without
-installing anything. If you're doing batch processing, headless work, or
-anything that doesn't fit in one tab, stay on the desktop side.
+The workflow this is built for: send a colleague a URL, they click it, they
+have the tool. No env-setup dance, no version pinning, no "the binary doesn't
+run on your CPU". If you're doing batch processing, headless work, or anything
+that doesn't fit in a single tab, this probably isn't the right tool.
 
 ## Quick start
 
@@ -44,8 +43,6 @@ whether N pages means "N frames" or "C channels × N/C frames"; the
 `forceTiffChannels` knob lets you override.
 
 ## What the pipeline does
-
-The stages mirror the Python pipeline closely, with a few simplifications.
 
 1. **Cleanup** — stack-wide percentile normalisation to [0, 255], FFT
    low-pass background subtraction, fringe unification, NLM denoise,
@@ -88,14 +85,14 @@ npm test
 
 Vitest. The suite mostly checks that the filter primitives (Gaussian,
 median, FFT background, Meijering, Li threshold, skeletonisation,
-Hungarian) match their scikit-image / scipy counterparts on small
-fixtures. There's also a TIFF round-trip and a tracker sanity check.
-End-to-end parity against the Python pipeline lives in
+Hungarian) match the canonical scikit-image / scipy implementations on
+small fixtures. There's also a TIFF round-trip and a tracker sanity
+check. A reference-comparison harness lives in
 [scripts/parity-test.ts](scripts/parity-test.ts) and runs against
-locally-staged reference outputs — not part of `npm test`.
+locally-staged data — not part of `npm test`.
 
-When you add an algorithm port, please add a fixture-vs-reference test.
-It catches drift much faster than eyeballing the overlay.
+If you add a new image-processing primitive, please add a fixture-vs-
+reference test. Catches drift much faster than eyeballing the overlay.
 
 ## Build for production
 
@@ -138,7 +135,7 @@ src/
       gaussian.ts          separable Gaussian, σ/√2 two-pass
       hessian.ts           Gaussian-derivative kernels
       median.ts            quickselect-based
-      meijering.ts         port of skimage `meijering`
+      meijering.ts         Meijering ridge filter
       nlm.ts               non-local means
       skeletonize.ts       Zhang–Suen
       threshold.ts         Li threshold, global + tiled local
@@ -180,7 +177,7 @@ tests/                     small per-primitive fixtures
 public/
   coi-serviceworker.js     COOP/COEP injector for Pages
 scripts/
-  parity-test.ts           offline JS-vs-Python comparison harness
+  parity-test.ts           offline comparison harness vs reference data
 ```
 
 ## Known rough edges
@@ -210,8 +207,7 @@ sources before allocating the RGB overlay.
 ## Configuration
 
 Everything in `pipeline.ts:PipelineConfig` is exposed in the config
-panel, with a tooltip explaining what it does. The defaults are
-calibrated against the Python operating point. The fields you'll
+panel, with a tooltip explaining what it does. The fields you'll
 actually touch:
 
 - `previewFrames` — how many frames the **Preview** button chews
@@ -230,4 +226,8 @@ file; **Import** loads one back. Useful for sharing exact runs.
 
 ## License
 
-MIT.
+AGPL-3.0-or-later. See [LICENSE](LICENSE).
+
+In plain English: fork it, modify it, run it, redistribute it — but if you
+distribute a modified version (binary or source) or run a modified version
+over a network, your changes have to be available under the same licence.

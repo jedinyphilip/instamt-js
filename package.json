@@ -2,7 +2,8 @@
   "name": "instamt-js",
   "version": "0.1.0",
   "private": true,
-  "description": "Browser port of insta-mt: IRM microtubule cleanup and per-MT kymograph extraction, no install required.",
+  "description": "In-browser IRM microtubule cleanup, detection, tracking and per-MT kymograph extraction. No install required.",
+  "license": "AGPL-3.0-or-later",
   "type": "module",
   "scripts": {
     "dev": "vite",

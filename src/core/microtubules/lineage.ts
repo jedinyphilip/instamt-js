@@ -23,7 +23,7 @@ export interface LineageConfig {
    * merging. Two coexisting tracks whose endpoints come within
    * `adjacencyPx` AND whose outward tangents have dot product ≤ this
    * value get merged. −1 = perfectly anti-parallel; −0.9 ≈ 26°
-   * tolerance from anti-parallel. Mirrors Python's `adjacency_dot=-0.9`.
+   * tolerance from anti-parallel.
    */
   adjacencyDot: number;
   /**
@@ -72,8 +72,8 @@ export const DEFAULT_LINEAGE: LineageConfig = {
  *      their dilated arc masks at a common frame have IoU >=
  *      `overlapIou` (duplicate / parallel detection of the same MT).
  *
- * Mirrors the Python `detect_lineages`, plus criterion 3 to absorb
- * coexisting parallel duplicates that the endpoint test rejects.
+ * Criterion 3 absorbs coexisting parallel duplicates that the
+ * anti-parallel endpoint test rejects by design.
  */
 export function detectLineages(
   tracks: Track[],
@@ -124,9 +124,9 @@ export function detectLineages(
       }
       if (linked) continue;
 
-      // Criterion 2: endpoint adjacency at any common frame — Python's
-      // `detect_lineages` test: endpoints within `adjacencyPx` AND
-      // outward tangents nearly anti-parallel (dot ≤ adjacencyDot).
+      // Criterion 2: endpoint adjacency at any common frame —
+      // endpoints within `adjacencyPx` AND outward tangents nearly
+      // anti-parallel (dot ≤ adjacencyDot).
       // Criterion 3: spatial overlap at any common frame — dilated
       // arc-mask IoU ≥ overlapIou. Absorbs coexisting parallel
       // duplicates of the same MT that criterion 2 deliberately
@@ -245,10 +245,11 @@ function arcBBox(arc: Float32Array): { y0: number; y1: number; x0: number; x1: n
   return { y0, y1, x0, x1 };
 }
 
-// Manhattan-distance ≤ radius diamond, matching Python's
-// `binary_dilation(m, iterations=radius)` with scipy's default 4-conn
-// cross structure. See track.ts:dilatedMaskSparse for the parity
-// rationale (a square dilation is ~2× larger and breaks IoU).
+// Manhattan-distance ≤ radius diamond. Equivalent to scipy's
+// `binary_dilation(m, iterations=radius)` with the default 4-conn
+// cross structure. See track.ts:dilatedMaskSparse for why a square
+// dilation (~2× larger) is wrong here — it fuses parallel MTs into
+// one track and fragments their continuations.
 function dilatedMask(arc: Float32Array, w: number, h: number, radius: number): Uint8Array {
   const mask = new Uint8Array(w * h);
   for (let p = 0; p < arc.length; p += 2) {

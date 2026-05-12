@@ -1,9 +1,7 @@
 /**
- * Shared types for the pipeline. The Stack3D type mirrors the (T, H, W)
- * arrays passed around in the Python codebase as ndarrays. Storage is
- * always row-major and we use Float32Array internally so we don't have
- * to keep promoting back and forth — uint16 input gets converted on
- * load.
+ * Shared types for the pipeline. Stack3D is a (T, H, W) row-major
+ * Float32 array. Uint16 input gets converted on load so we don't
+ * keep promoting back and forth.
  */
 
 export type Shape3D = readonly [t: number, h: number, w: number];

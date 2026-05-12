@@ -7,7 +7,7 @@ import type { Arc } from './arc';
  *
  * Ordering: start at an endpoint (one same-component neighbour) if any
  * exist, else any pixel for a closed loop. Walk preferring 4-connected
- * neighbours over diagonals — matches Python `_order_arc`.
+ * neighbours over diagonals.
  */
 export function walkArcs(skel: Uint8Array, w: number, h: number, minLen: number): Arc[] {
   const visited = new Uint8Array(skel.length);

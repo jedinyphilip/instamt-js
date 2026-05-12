@@ -137,15 +137,15 @@ export const DEFAULT_CONFIG: PipelineConfig = {
   fringeWindow: 41,
   fringeBoost: 1.3,
   contrast: 2.5,
-  // Match the Python reference: 4.0 is the right h-factor when the
-  // input has already been normalised to 0-255 (which the new stack
-  // pre-normalisation step guarantees).
+  // 4.0 is the right h-factor when the input has already been
+  // normalised to 0-255 (which the stack pre-normalisation step
+  // guarantees).
   nlmHFactor: 4.0,
   nlmPatch: 7,
-  // Match Python's skimage default (11). The previous default of 7
-  // saved ~2.5× cleanup time but knocked weak ridges below the Li
-  // threshold downstream, losing real MTs. Drop to 7 only after
-  // confirming detection is unaffected on your data.
+  // skimage's default. The previous default of 7 saved ~2.5× cleanup
+  // time but knocked weak ridges below the Li threshold downstream,
+  // losing real MTs. Drop to 7 only after confirming detection is
+  // unaffected on your data.
   nlmSearch: 11,
   detect: DEFAULT_DETECT,
   autoScale: true,
@@ -160,9 +160,7 @@ export const DEFAULT_CONFIG: PipelineConfig = {
   fpsCh1: 20,
   umPerPx: null, // null → auto-calibrate from MT FWHM
   mtWidthUm: 0.025,
-  // Aligned with the user's Python `config.json` operating point
-  // (min_length_um=0.5). The argparse default of 1.0 was dropping
-  // legitimate short MTs that the Python run keeps.
+  // Calibrated against real data — 1.0 µm drops legitimate short MTs.
   minLengthUm: 0.5,
   workerCount: null,
   forceTiffChannels: null,
@@ -322,13 +320,12 @@ export async function runPipeline(
     });
   }
 
-  // 1b. Stack-wide pre-normalisation. Mirrors `pipeline.py:_stack_levels`:
-  // compute the 0.1% / 99.9% percentiles across the whole stack, then map
-  // every pixel of every frame linearly onto [0, 255]. This is the input
-  // contract the Python cleanup pipeline assumes — every default
-  // (NLM h-factor, contrast, fringe boost…) is calibrated for it.
-  // Without this step, raw 16-bit values feed the cleanup with a
-  // dynamic range ~100× off, and no parameter retune compensates.
+  // 1b. Stack-wide pre-normalisation. Compute the 0.1% / 99.9%
+  // percentiles across the whole stack, then map every pixel of
+  // every frame linearly onto [0, 255]. Every cleanup default (NLM
+  // h-factor, contrast, fringe boost…) is calibrated for that range;
+  // without this step raw 16-bit values feed cleanup with a dynamic
+  // range ~100× off and no parameter retune compensates.
   const [pLo, pHi] = stackPercentileLevels(stack.data, 0.001, 0.999);
   onProgress({
     phase: 'reading',
@@ -431,10 +428,9 @@ export async function runPipeline(
       stack = { data: new Float32Array(0), shape: stack.shape };
     }
 
-    // 3a. Brightness flatten via per-frame medians. Equivalent in
-    // effect to Python `flatten_time` (each frame's median is moved to
-    // a common reference) but the reference is the median-of-medians
-    // computed from T scalars — no main-thread pass over T·N pixels.
+    // 3a. Brightness flatten via per-frame medians. Each frame's
+    // median is moved to the median-of-medians; computed from T
+    // scalars so there's no main-thread pass over T·N pixels.
     const refMedian = medianOf(perFrameMedian);
     const shifts = new Float64Array(T);
     let maxShift = 0;

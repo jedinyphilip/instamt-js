@@ -4,7 +4,7 @@ import type { Track } from './track';
 /**
  * Sub-pixel FWHM of a downward-dip intensity profile (MT cross-section
  * in IRM). Returns null if the dip is too shallow or doesn't cross the
- * half-depth threshold cleanly. Mirrors `_fwhm_dip` from Python.
+ * half-depth threshold cleanly.
  */
 function fwhmDip(profile: Float64Array): number | null {
   let lo = Infinity;

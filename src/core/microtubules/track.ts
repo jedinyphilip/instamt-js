@@ -22,7 +22,6 @@ export const DEFAULT_TRACK: TrackConfig = {
 
 /**
  * Link per-frame arcs into tracks via dilated-mask IoU + Hungarian.
- * Mirrors the Python `track_arcs`.
  */
 export function trackArcs(
   perFrameArcs: Arc[][],
@@ -111,12 +110,12 @@ interface SparseMask {
 
 /** Build the sparse dilated mask for an arc.
  *
- *  Matches Python's `binary_dilation(m, iterations=radius)`: scipy's
- *  default structure is the 4-connected cross, and iterating it
- *  `radius` times grows a Manhattan-distance ≤ radius diamond around
- *  every arc pixel — NOT a `(2r+1)²` square. A square dilation makes
- *  masks ~2× larger than Python's, which fuses parallel MTs into one
- *  track and fragments their continuations.
+ *  Equivalent to scipy's `binary_dilation(m, iterations=radius)` with
+ *  the default 4-conn cross: iterating it `radius` times grows a
+ *  Manhattan-distance ≤ radius diamond around every arc pixel — NOT
+ *  a `(2r+1)²` square. A square dilation makes masks ~2× larger and
+ *  ends up fusing parallel MTs into one track while fragmenting
+ *  their continuations.
  */
 function dilatedMaskSparse(arc: Arc, w: number, h: number, radius: number): SparseMask {
   const arcLen = arc.length / 2;

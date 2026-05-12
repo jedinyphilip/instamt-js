@@ -21,7 +21,7 @@ import type { Image2D } from '../types';
 export function denoise(
   img: Image2D,
   contrast = 2.5,
-  nlmHFactor = 4.0, // matches Python (4.0 on 0-255-normalised input)
+  nlmHFactor = 4.0, // 4.0 on 0-255-normalised input
   nlmPatch = 7,
   nlmSearch = 11
 ): Image2D {
@@ -47,7 +47,7 @@ export function denoise(
   const smooth = gaussianFilter2d(speckleClean, 0.5);
 
   // Contrast: amplify deviations from the *original input's* mean
-  // (matches Python — it computes mean_val before any processing).
+  // (the mean is computed once, before any processing).
   const out = new Float32Array(smooth.data.length);
   for (let i = 0; i < smooth.data.length; i++) {
     const enhanced = meanVal + (smooth.data[i]! - meanVal) * contrast;

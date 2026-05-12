@@ -7,8 +7,7 @@ import type { Image2D } from '../types';
  * the profiler we can switch to a constant-time histogram update along
  * each row.
  *
- * Edges use mirror reflection like scipy.ndimage.median_filter("mirror"),
- * matching the Python implementation.
+ * Edges use mirror reflection like scipy.ndimage.median_filter("mirror").
  */
 export function medianFilter2d(img: Image2D, size: number): Image2D {
   if (size < 1 || size % 2 === 0) {

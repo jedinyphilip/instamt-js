@@ -15,9 +15,8 @@
  *
  * The earlier incarnation of this file stored the filters in REVERSED
  * order and offset by `(fLen-1)` — those two errors don't cancel under
- * symmetric padding, so the resulting σ estimate was biased ~8% low,
- * which then propagated into a too-weak NLM `h` and a noisier denoise
- * output (max ≈ 24 grey-level Δ vs Python). The corrected formula
+ * symmetric padding, biasing the σ estimate ~8% low and yielding a
+ * too-weak NLM `h` and a noisier denoise. The corrected formula
  * matches PyWavelets to floating-point precision.
  */
 

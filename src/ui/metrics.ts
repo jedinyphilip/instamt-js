@@ -1,11 +1,9 @@
 /**
  * Helpers for displaying / exporting metrics in the UI:
  *   - aggregating per-MT metrics into a global summary
+ *     (n_mts + total_mt_frames + mean/std of every numeric column)
  *   - rendering a key/value table
  *   - rendering small inline line-chart canvases for timeseries traces
- *
- * Mirrors the Python `_metrics_global.csv` aggregation: n_mts +
- * total_mt_frames + mean/std of every numeric column.
  */
 
 import type { PipelineOutput } from '../core/pipeline';
@@ -401,15 +399,14 @@ export function renderPerMtMetricsTable(
   if (table) wireTableToolbar(root, table, `${labelStr}_metrics`);
 }
 
-/** Draw a line chart of `(xs, ys)` with a rolling ±1σ band. Mirrors the
- *  Python timeseries plot style: filled band + line on top, light grid,
- *  large axis labels. Margins/fonts match the kymograph axed plot so the
- *  six panels in the kymo modal share a unified look.
+/** Draw a line chart of `(xs, ys)` with a rolling ±1σ band: filled
+ *  band + line on top, light grid, large axis labels. Margins / fonts
+ *  match the kymograph axed plot so the panels in the kymo modal
+ *  share a unified look.
  *
  *  The σ band is a rolling-window standard deviation (window = 5
- *  frames) around each frame's local mean — analogous to Python's
- *  `mean ± std` band, but computed within a single MT trace since this
- *  is a per-MT plot.
+ *  frames) around each frame's local mean — `mean ± std` computed
+ *  within a single MT trace.
  *
  *  Caller must set `canvas.width`/`height`. */
 export function drawLineChart(
@@ -454,8 +451,8 @@ export function drawLineChart(
     return;
   }
 
-  // Rolling mean + std for the ±1σ band (analogous to Python's
-  // matplotlib `fill_between(mean - std, mean + std, alpha=0.2)`).
+  // Rolling mean + std for the ±1σ band (the band is fill_between
+  // mean - std and mean + std).
   const yVals = pts.map((p) => p[1]);
   const { mean: rollMean, std: rollStd } = rollingStats(yVals, 5);
 

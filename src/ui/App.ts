@@ -84,7 +84,7 @@ interface AppEls {
 
 export function mount(root: HTMLElement): void {
   root.innerHTML = `
-    <h1>insta-mt <span class="tag">browser build · v0.3</span></h1>
+    <h1>insta-mt <span class="tag">v0.3</span></h1>
     <p class="note">
       <strong>Note:</strong> convert <code>.nd2</code> and other acquisition formats to TIFF in
       Fiji (ImageJ): <code>File → Import → Bio-Formats…</code>, then
@@ -388,8 +388,8 @@ export function mount(root: HTMLElement): void {
       if (pngBlob) {
         zip.file(`${folder}results/${label}_${lastResult.stem}_kymo.png`, pngBlob);
       }
-      // Raw float CSVs — easy to load into Python/Excel without a TIFF
-      // reader.
+      // Raw float CSVs — easy to load into Excel / numpy / R without
+      // needing a TIFF reader.
       zip.file(
         `${folder}results/raw/${label}_${lastResult.stem}_irm_mask.csv`,
         kymoChannelToCsv(raw.irmMask)
