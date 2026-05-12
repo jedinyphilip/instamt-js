@@ -4,7 +4,7 @@ In-browser IRM microtubule cleanup, detection, tracking and per-MT kymograph
 extraction. Drop a multi-page TIFF in, get a zip out. Nothing leaves your
 machine — there is no server.
 
-Live: <https://jedinyphilip.github.io/instamt-js/>
+<https://jedinyphilip.github.io/instamt-js/>
 
 ## Quick start
 
