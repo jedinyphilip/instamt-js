@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/favicon.svg" alt="InstaMT" width="72" />
+</p>
+
 # insta-mt
 
 In-browser IRM microtubule cleanup, detection, tracking and per-MT kymograph
