@@ -154,7 +154,7 @@ export function mount(root: HTMLElement): void {
     </div>
 
     <footer>
-      <a href="https://github.com/yourusername/insta-mt" target="_blank" rel="noopener">source</a>
+      <a href="https://github.com/jedinyphilip/instamt-js" target="_blank" rel="noopener">source</a>
       · runs entirely in your browser, no upload
     </footer>
   `;
