@@ -1,8 +1,4 @@
-<p align="center">
-  <img src="public/favicon.svg" alt="InstaMT" width="72" />
-</p>
-
-# insta-mt
+# <img src="public/favicon.svg" alt="" width="36" align="absmiddle" /> insta-mt
 
 In-browser IRM microtubule cleanup, detection, tracking and per-MT kymograph
 extraction. Drop a multi-page TIFF in, get a zip out. Nothing leaves your
