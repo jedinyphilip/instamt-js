@@ -28,8 +28,7 @@ tune config. There's a hint next to every config field if you hover.
   yours is the other way around.
 - `.nd2` and friends: convert to TIFF in Fiji first
   (`File → Import → Bio-Formats…` then `File → Save As → Tiff…`). Native
-  ND2 reading would mean shipping the Bio-Formats WASM bundle (~25 MB),
-  which I haven't been willing to pay for yet.
+  ND2 reading would mean shipping the Bio-Formats WASM bundle (~25 MB).
 
 If the TIFF doesn't carry ImageJ metadata, the reader can't always tell
 whether N pages means "N frames" or "C channels × N/C frames" - the
